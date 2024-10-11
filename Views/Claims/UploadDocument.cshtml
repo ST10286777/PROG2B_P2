@@ -1,0 +1,66 @@
+﻿<style>
+
+    .button {
+        border: none;
+        color: white;
+        background-color: #8D8DFF;
+        padding: 8px 8px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+<h1 style="color: #8D8DFF">Files</h1>
+
+<!-- Display any messages -->
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+<!-- Upload form -->
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">Choose a file to upload:</label>
+        <input type="file" name="file" class="form-control" />
+        <button type="submit" class="button">Upload</button>
+    </div>
+</form>
+<ul>
+        <li>
+            Contract -
+            Size: 16 KB -
+        Last Modified: 2024/09/02 13:37
+        - <a>Download</a>
+        </li>
+</ul>
+
+<p>
+    <a asp-action="Create" class="button">Back</a> <br />
+</p>
+@* <!-- Display uploaded files -->
+@if (Model != null && Model.Count > 0)
+{
+    <ul>
+        @foreach (var file in Model)
+        {
+            <li>
+                @file.Name -
+                Size: @file.DisplaySize -
+                Last Modified: @file.LastModified?.ToString("g")
+                - <a asp-action="DownloadFile" asp-route-fileName="@file.Name">Download</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No files found or model is null.</p>
+}
+ *@

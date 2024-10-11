@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PROG_P1</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PROG_P1.styles.css" asp-append-version="true" />
+    <style>
+        .navbar {
+            font-family: "Century Gothic", sans-serif;
+            height: 90px; /* Adjust the navbar height as needed */
+            max-height: 8000px; /* Optionally, set a max-height */
+            margin: 0 auto; /* Center the navbar */
+        }
+
+        .nav-link {
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+            .nav-link i {
+                margin-right: 8px; /* Space between icon and text */
+            }
+
+        .nav-item {
+            margin-right: 15px; /* Increase space between each nav item */
+        }
+
+        .nav-link:hover {
+            background-color: #4D4DDD;
+        }
+
+        .dropdown-menu {
+            background-color: #4D4DFF; /* Consistent with navbar color */
+        }
+
+        .dropdown-item:hover {
+            background-color: #4D4DDD; /* Consistent with link hover color */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm" style="background-color: #4D4DFF;">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+              <img src="~/ImageFolder/CMCSNAV.png" width="105" height="60">
+            </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="About">
+                                <i class="fas fa-info-circle"></i>About
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-book"></i>Claims
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Create">Submit</a></li>
+                                <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Index">Process</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

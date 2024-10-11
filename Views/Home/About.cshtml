@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+
+<style>
+
+    /* Main content container */
+    .main {
+        background-color: #4D4DFF;
+        color: white;
+        margin: 10px;
+        padding: 20px 20px;
+        align-content: center;
+        border-radius: 25px;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    /* Outer about page container */
+    .about-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 10px;
+        border: 3px solid #4D4DFF;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    /* Title styles */
+    h1 {
+        color: #4D4DFF;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Text and paragraph styling */
+    p.lead {
+        font-size: 1.2em;
+        color: #333;
+        margin-bottom: 20px;
+        border-left: 5px solid #4D4DFF;
+        padding-left: 15px;
+    }
+
+    p, ul {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    /* Apply white font color for ul and paragraphs within the main container */
+    .main ul, .main p {
+        color: white;
+    }
+
+    /* List styling */
+    ul {
+        list-style-type: disc;
+        padding-left: 20px;
+    }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+    /* Call to action section */
+    .call-to-action {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #fff;
+        background-color: #4D4DFF;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 40px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="about-container">
+    <h1 class="text-center">@ViewData["Title"] <img src="~/ImageFolder/CMCSLOGO.png" width="380" height="160"></h1>
+
+    <p class="lead text-justify">
+        Welcome to the <strong>Contract Monthly Claim System (CMCS)</strong>, a comprehensive platform designed to streamline and enhance the process of claim submissions for contract lecturers. The system is engineered to simplify and automate the otherwise complex administrative tasks associated with claim management, ensuring accuracy, accountability, and efficiency for all parties involved.
+    </p>
+
+    <div class="main">
+        <p>
+            <strong>Key Features:</strong>
+        </p>
+        <ul>
+            <li><strong>Accurate Calculations:</strong> Lecturers can submit claims based on hours worked and hourly wage rates. The system automatically calculates the total earnings, reducing the risk of errors and miscalculations.</li>
+            <li><strong>Thorough Review Process:</strong> Claims are subject to approval by both the Programme Coordinator and Academic Manager. This ensures that all submissions are accurate and compliant with internal policies, promoting a higher level of accountability.</li>
+            <li><strong>Document Uploads:</strong> CMCS allows lecturers to upload supporting documents, such as timesheets or contracts, making it easier to verify claims and ensure that all necessary paperwork is included in a single submission.</li>
+            <li><strong>User-Friendly Interface:</strong> With a seamless design, CMCS enhances user satisfaction by providing lecturers and administrators with an easy-to-navigate platform that simplifies claim submission and approval workflows.</li>
+            <li><strong>Improved Efficiency:</strong> By automating calculations and integrating the claim submission process with document uploads and approval workflows, CMCS significantly reduces the time and effort required to manage contract claims.</li>
+            <li><strong>Reduced Errors:</strong> The system's structured process mitigates the risk of manual entry errors, improving the reliability and accuracy of data across all claims.</li>
+        </ul>
+    </div>
+
+    <p class="text-justify">
+        The CMCS is not just a tool for claim submissions; it is a system designed to foster collaboration, transparency, and efficiency across the entire claim management process. By bringing together lecturers, Programme Coordinators, and Academic Managers on one platform, we aim to create an environment where claims are processed swiftly, accurately, and fairly.
+    </p>
+
+    <p class="text-justify">
+        Whether you're a lecturer submitting your monthly claims or an administrator managing approvals, CMCS is here to support you every step of the way, ensuring that your time and efforts are valued and compensated with precision and fairness.
+    </p>
+
+    <div class="call-to-action">
+        Experience the future of claim management with CMCS – where efficiency meets accountability.
+    </div>
+</div>

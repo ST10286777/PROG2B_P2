@@ -1,0 +1,61 @@
+﻿@model IEnumerable<PROG_P1.Models.Claims>
+
+@{
+    ViewData["Title"] = "Review Claims";
+}
+<style>
+    .button {
+        color: white;
+        background-color: #4D4DFF;
+        padding: 8px 8px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        width: auto;
+        padding: 10px 20px;
+    }
+</style>
+
+<h1 class="text-center">Review Claims</h1>
+
+<div class="container">
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Lecturer name</th>
+                <th>@Html.DisplayNameFor(model => model.Module)</th>
+                <th>Hours Worked</th>
+                <th>Hourly wage</th>
+                <th>Total earnings</th>
+                <th>View supporting documents</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Module)</td>
+                    <td>@Html.DisplayFor(modelItem => item.HoursWorked)</td>
+                    <td>R @item.HourlyWage.ToString("N2")</td>
+                    <td>R @item.TotalEarnings.ToString("N2")</td>
+                    <td><a asp-action="UploadDocument" class="button">View Document</a></td>
+                    <td>
+                        <div class="d-flex justify-content-around">
+                            <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success btn-sm">Approve</a>
+                            <a asp-action="Reject" asp-route-id="@item.ClaimsID" class="btn btn-danger btn-sm">Reject</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
