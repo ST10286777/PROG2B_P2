@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,13 @@ namespace PROG_P1.Controllers
 {
     public class ClaimsController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public ClaimsController(ApplicationDbContext context)
+        public ClaimsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Claims
@@ -60,10 +63,14 @@ namespace PROG_P1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarnings,Document")] Claims claims)
+        public async Task<IActionResult> Create([Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarnings,SupportingNote,Status")] Claims claims)
         {
             if (ModelState.IsValid)
             {
+                var userId = _userManager.GetUserId(User);
+                claims.UserID = userId;
+                claims.Status = "Pending";
+
                 _context.Add(claims);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,7 +99,7 @@ namespace PROG_P1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarnings,Document")] Claims claims)
+        public async Task<IActionResult> Edit(int id, [Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarningsSupportingNote,Status")] Claims claims)
         {
             if (id != claims.ClaimsID)
             {
@@ -160,6 +167,35 @@ namespace PROG_P1.Controllers
             return _context.Claims.Any(e => e.ClaimsID == id);
         }
 
-      
+
+        //GET: Approve or Reject a claim based on its ID & the provided status
+        public async Task<IActionResult> Approve(int id, string status)
+        {
+            var claim = _context.Claims.FirstOrDefault(c => c.ClaimsID == id); 
+            if (claim == null)
+            {
+                return NotFound();
+            }
+
+            claim.Status = "Approved"; //Update the status of the claim (either approve / reject)
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        //GET: Approve or Reject a claim based on its ID & the provided status
+        public async Task<IActionResult> Reject(int id, string status)
+        {
+            var claim = _context.Claims.FirstOrDefault(c => c.ClaimsID == id);
+            if (claim == null)
+            {
+                return NotFound();
+            }
+
+            claim.Status = "Rejected"; //Update the status of the claim (either approve / reject)
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }

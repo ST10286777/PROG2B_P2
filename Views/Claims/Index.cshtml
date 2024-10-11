@@ -31,6 +31,8 @@
                 <th>Hours Worked</th>
                 <th>Hourly wage</th>
                 <th>Total earnings</th>
+                <th>Supporting Note</th>
+                <th>Status</th>
                 <th>View supporting documents</th>
                 <th>Actions</th>
             </tr>
@@ -44,12 +46,19 @@
                     <td>@Html.DisplayFor(modelItem => item.HoursWorked)</td>
                     <td>R @item.HourlyWage.ToString("N2")</td>
                     <td>R @item.TotalEarnings.ToString("N2")</td>
+                    <td>@Html.DisplayFor(modelItem => item.SupportingNote)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
                     <td><a asp-action="UploadDocument" class="button">View Document</a></td>
                     <td>
                         <div class="d-flex justify-content-around">
                             <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Details</a>
-                            <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success btn-sm">Approve</a>
-                            <a asp-action="Reject" asp-route-id="@item.ClaimsID" class="btn btn-danger btn-sm">Reject</a>
+                            <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Edit</a>
+                            @if (item.Status == "Pending")
+                            {
+                                <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success">Approve</a>
+                                <a asp-action="Reject" asp-route-id="@item.ClaimsID" class="btn btn-secondary">Reject</a>
+                            }
                         </div>
                     </td>
                 </tr>

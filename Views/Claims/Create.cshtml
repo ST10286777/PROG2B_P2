@@ -97,7 +97,11 @@
                 <input asp-for="HourlyWage" class="form-control" />
                 <span asp-validation-for="HourlyWage" class="text-danger"></span>
             </div>
-           
+            <div class="form-group">
+                <label>Supporting Note: </label>
+                <textarea asp-for="SupportingNote" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="SupportingNote" class="text-danger"></span>
+            </div>
             <p>
                 <a asp-action="UploadDocument" class="button">Upload Document Supporting Claim</a> <br />
             </p>
