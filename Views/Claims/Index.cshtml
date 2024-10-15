@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<PROG_P1.Models.Claims>
+@* @inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+ *@
 
 @{
     ViewData["Title"] = "Review Claims";
@@ -52,8 +55,13 @@
                     <td>
                         <div class="d-flex justify-content-around">
                             <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Delete</a>
-                            <a asp-action="Edit" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Edit</a>
+                           
+                                <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Delete</a>
+                            
+                            @if (User.IsInRole("Lecturer"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Edit</a>
+                            }
                             @if (item.Status == "Pending")
                             {
                                 <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success">Approve</a>

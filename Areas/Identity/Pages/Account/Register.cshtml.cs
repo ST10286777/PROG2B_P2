@@ -114,6 +114,7 @@ namespace PROG_P1.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -125,6 +126,15 @@ namespace PROG_P1.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // Assign role based on position
+                    var position = Input.Position;
+                    var validRoles = new[] { "Lecturer", "Programme Coordinator", "Academic Manager", "HR" };
+
+                    if (validRoles.Contains(position))
+                    {
+                        await _userManager.AddToRoleAsync(user, position);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -148,6 +158,7 @@ namespace PROG_P1.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -157,6 +168,7 @@ namespace PROG_P1.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
 
         private IdentityUser CreateUser()
         {

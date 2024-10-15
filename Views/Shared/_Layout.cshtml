@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,9 +11,9 @@
     <style>
         .navbar {
             font-family: "Century Gothic", sans-serif;
-            height: 90px; /* Adjust the navbar height as needed */
-            max-height: 8000px; /* Optionally, set a max-height */
-            margin: 0 auto; /* Center the navbar */
+            height: 90px;
+            max-height: 8000px; 
+            margin: 0 auto; 
         }
 
         .nav-link {
@@ -22,11 +23,11 @@
         }
 
             .nav-link i {
-                margin-right: 8px; /* Space between icon and text */
+                margin-right: 8px; 
             }
 
         .nav-item {
-            margin-right: 15px; /* Increase space between each nav item */
+            margin-right: 15px; 
         }
 
         .nav-link:hover {
@@ -34,11 +35,11 @@
         }
 
         .dropdown-menu {
-            background-color: #4D4DFF; /* Consistent with navbar color */
+            background-color: #4D4DFF; 
         }
 
         .dropdown-item:hover {
-            background-color: #4D4DDD; /* Consistent with link hover color */
+            background-color: #4D4DDD; 
         }
     </style>
 </head>
@@ -68,10 +69,17 @@
                             <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-book"></i>Claims
                             </a>
+                      
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                 @if (User.IsInRole("Lecturer"))
+                        {
                                 <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Create">Submit</a></li>
+                        }
+
                                 <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Index">Process</a></li>
                             </ul>
+                        
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
