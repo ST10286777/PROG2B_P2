@@ -11,5 +11,6 @@ namespace PROG_P1.Data
         {
         }
         public DbSet<PROG_P1.Models.Claims> Claims { get; set; } = default!;
+        public DbSet<PROG_P1.Models.Document> Documents { get; set; } = default!;
     }
 }

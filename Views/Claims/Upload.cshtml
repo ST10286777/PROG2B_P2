@@ -1,0 +1,30 @@
+﻿@model List<PROG_P1.Models.Document>
+@{
+    ViewBag.Title = "Upload Document";
+}
+
+<h2>Upload Document for Claim @ViewBag.ClaimID</h2>
+
+<form asp-action="Upload" asp-controller="Claims" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="claimId" value="@ViewBag.ClaimID" />
+    <div>
+        <label>Select a file:</label>
+        <input type="file" name="file" />
+    </div>
+    <button type="submit">Upload</button>
+</form>
+
+<p>@ViewBag.Message</p>
+
+<hr />
+
+<h2>Available Documents for Download</h2>
+<ul>
+    @foreach (var file in Model)
+      {
+        <li>
+            <a asp-action="Download" asp-controller="Claims" asp-route-fileName="@file">@file</a>
+        </li>
+        }
+    
+</ul>

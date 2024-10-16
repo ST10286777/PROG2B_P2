@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROG_P1.Data;
 
@@ -11,9 +12,11 @@ using PROG_P1.Data;
 namespace PROG_P1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241016133456_addDocument")]
+    partial class addDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,11 +264,11 @@ namespace PROG_P1.Data.Migrations
 
             modelBuilder.Entity("PROG_P1.Models.Document", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("DocumentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentId"));
 
                     b.Property<int>("ClaimsID")
                         .HasColumnType("int");
@@ -278,7 +281,14 @@ namespace PROG_P1.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DocumentId");
 
                     b.HasIndex("ClaimsID");
 
@@ -338,18 +348,13 @@ namespace PROG_P1.Data.Migrations
 
             modelBuilder.Entity("PROG_P1.Models.Document", b =>
                 {
-                    b.HasOne("PROG_P1.Models.Claims", "Claims")
-                        .WithMany("Document")
+                    b.HasOne("PROG_P1.Models.Claims", "Claim")
+                        .WithMany()
                         .HasForeignKey("ClaimsID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Claims");
-                });
-
-            modelBuilder.Entity("PROG_P1.Models.Claims", b =>
-                {
-                    b.Navigation("Document");
+                    b.Navigation("Claim");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Create";
 }
+
 <style>
     .button {
         color: white;
@@ -67,53 +68,59 @@
         width: 100%;
         color: white;
     }
-
-   
 </style>
 
 <hr />
 <div class="contact-form">
     <div class="formcard">
         <h1 style="align-self: center">Submit Claim</h1>
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Module" class="control-label"></label>
                 <input asp-for="Module" class="form-control" />
                 <span asp-validation-for="Module" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label>Hours Worked</label>
+                <label asp-for="HoursWorked" class="control-label"></label>
                 <input asp-for="HoursWorked" class="form-control" />
                 <span asp-validation-for="HoursWorked" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label>Hourly Wage</label>
+                <label asp-for="HourlyWage" class="control-label"></label>
                 <input asp-for="HourlyWage" class="form-control" />
                 <span asp-validation-for="HourlyWage" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label>Supporting Note: </label>
+                <label asp-for="SupportingNote" class="control-label"></label>
                 <textarea asp-for="SupportingNote" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="SupportingNote" class="text-danger"></span>
             </div>
-            <p>
-                <a asp-action="UploadDocument" class="button">Upload Document Supporting Claim</a> <br />
-            </p>
-           
-                <input type="submit" value="Create" class="button" />
-            
+
+            <!-- Document Upload Section -->
+            <div class="form-group">
+                <label for="file">Upload Supporting Documents</label>
+                <input type="file" name="file" class="form-control" multiple />
+                <span class="text-danger">@ViewBag.Message</span>
+            </div>
+
+            <input type="submit" value="Create" class="button" />
         </form>
     </div>
 </div>
 
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-   
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

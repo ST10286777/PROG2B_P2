@@ -42,6 +42,7 @@ namespace PROG_P1
             app.UseStaticFiles();
 
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,23 +17,29 @@ namespace PROG_P1.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly string _uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
         public ClaimsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
+            if (!Directory.Exists(_uploadFolder))
+            {
+                Directory.CreateDirectory(_uploadFolder);
+            }
         }
 
         // GET: Claims
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Claims.ToListAsync());
+            var userId = _userManager.GetUserId(User);
+            var claimsWithDocuments = await _context.Claims
+                .Include(c => c.Document) // This includes the related documents
+                .ToListAsync();
+
+            return View(claimsWithDocuments);
         }
 
-        public IActionResult UploadDocument()
-        {
-            return View();
-        }
 
         // GET: Claims/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -63,7 +70,7 @@ namespace PROG_P1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarnings,SupportingNote,Status")] Claims claims)
+        public async Task<IActionResult> Create([Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,SupportingNote")] Claims claims, IFormFile file)
         {
             if (ModelState.IsValid)
             {
@@ -71,12 +78,45 @@ namespace PROG_P1.Controllers
                 claims.UserID = userId;
                 claims.Status = "Pending";
 
+                // Save claim first
                 _context.Add(claims);
                 await _context.SaveChangesAsync();
+
+                // Handle file upload if a file is selected
+                if (file != null && file.Length > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine(_uploadFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    // Save the file information in the database linked to the claim
+                    var document = new Document
+                    {
+                        FileName = fileName,
+                        FilePath = filePath,
+                        ClaimsID = claims.ClaimsID
+                    };
+                    _context.Documents.Add(document);
+                    await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "File uploaded successfully!";
+                }
+                else
+                {
+                    ViewBag.Message = "Please select a file.";
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(claims);
         }
+
+
 
         // GET: Claims/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -99,7 +139,7 @@ namespace PROG_P1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarningsSupportingNote,Status")] Claims claims)
+        public async Task<IActionResult> Edit(int id, [Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarningsSupportingNote,Status")] Claims claims, IFormFile pdfFile)
         {
             if (id != claims.ClaimsID)
             {
@@ -110,6 +150,7 @@ namespace PROG_P1.Controllers
             {
                 try
                 {
+                   
                     _context.Update(claims);
                     await _context.SaveChangesAsync();
                 }
@@ -196,6 +237,62 @@ namespace PROG_P1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Upload()
+        {
+            return View();
+        }
 
+
+        // POST: Upload Document
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file, int claimId)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var filePath = Path.Combine(_uploadFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Save file details to the database
+                var document = new Document
+                {
+                    FileName = fileName,
+                    FilePath = filePath,
+                    ClaimsID = claimId
+                };
+                _context.Documents.Add(document);
+                await _context.SaveChangesAsync();
+
+                ViewBag.Message = "File uploaded successfully!";
+            }
+            else
+            {
+                ViewBag.Message = "Please select a file.";
+            }
+
+            return RedirectToAction("Details", new { id = claimId });
+        }
+
+        // Download Document
+        public IActionResult Download(string fileName)
+        {
+            var filePath = Path.Combine(_uploadFolder, fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                return File(fileBytes, "application/pdf", fileName);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
+
+
 }
+

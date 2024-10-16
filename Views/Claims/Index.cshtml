@@ -51,7 +51,19 @@
                     <td>R @item.TotalEarnings.ToString("N2")</td>
                     <td>@Html.DisplayFor(modelItem => item.SupportingNote)</td>
                     <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                    <td><a asp-action="UploadDocument" class="button">View Document</a></td>
+                    <td>
+                        @if (item.Document != null && item.Document.Any())
+                        {
+                            foreach (var doc in item.Document)
+                            {
+                                <a asp-action="Download" asp-route-fileName="@doc.FileName" class="button">View Document</a>
+                            }
+                        }
+                        else
+                        {
+                            <span>No documents</span>
+                        }
+                    </td>
                     <td>
                         <div class="d-flex justify-content-around">
                             <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Details</a>
@@ -62,7 +74,7 @@
                             {
                                 <a asp-action="Edit" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Edit</a>
                             }
-                            @if (item.Status == "Pending")
+                            @if (item.Status == "Pending" && (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager")))
                             {
                                 <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success">Approve</a>
                                 <a asp-action="Reject" asp-route-id="@item.ClaimsID" class="btn btn-secondary">Reject</a>

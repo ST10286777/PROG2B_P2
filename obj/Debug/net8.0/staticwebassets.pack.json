@@ -257,6 +257,22 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\uploads\\ADDB- A2.pdf",
+      "PackagePath": "staticwebassets\\uploads\\ADDB- A2.pdf"
+    },
+    {
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\uploads\\ADDB7311MM.pdf",
+      "PackagePath": "staticwebassets\\uploads\\ADDB7311MM.pdf"
+    },
+    {
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\uploads\\SAND Past Paper.pdf",
+      "PackagePath": "staticwebassets\\uploads\\SAND Past Paper.pdf"
+    },
+    {
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\uploads\\SOEN POE.pdf",
+      "PackagePath": "staticwebassets\\uploads\\SOEN POE.pdf"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PROG_P1.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
