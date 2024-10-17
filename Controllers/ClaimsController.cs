@@ -40,6 +40,17 @@ namespace PROG_P1.Controllers
             return View(claimsWithDocuments);
         }
 
+        // GET: Claims
+        public async Task<IActionResult> LecturerIndex()
+        {
+            var userId = _userManager.GetUserId(User);
+            var claims = await _context.Claims
+                .Include(c => c.Document)
+                .Where(c => c.UserID == userId) // Use Where instead of FirstOrDefault to return multiple claims
+                .ToListAsync(); // Get a list of claims
+
+            return View("LecturerIndex", claims); // Pass claims as the model
+        }
 
         // GET: Claims/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -110,12 +121,11 @@ namespace PROG_P1.Controllers
                     ViewBag.Message = "Please select a file.";
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(LecturerIndex));
             }
 
             return View(claims);
         }
-
 
 
         // GET: Claims/Edit/5
@@ -135,11 +145,9 @@ namespace PROG_P1.Controllers
         }
 
         // POST: Claims/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClaimsID,Name,Module,HoursWorked,HourlyWage,TotalEarningsSupportingNote,Status")] Claims claims, IFormFile pdfFile)
+        public async Task<IActionResult> Edit(int id, [Bind("ClaimsID, Name, Module, HoursWorked, HourlyWage, SupportingNote, Status")] Claims claims)
         {
             if (id != claims.ClaimsID)
             {
@@ -150,13 +158,13 @@ namespace PROG_P1.Controllers
             {
                 try
                 {
-                   
                     _context.Update(claims);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index)); // Ensure this redirect happens on success
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClaimsExists(claims.ClaimsID))
+                    if (!_context.Claims.Any(e => e.ClaimsID == id))
                     {
                         return NotFound();
                     }
@@ -165,10 +173,15 @@ namespace PROG_P1.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
+
+            // If ModelState is invalid, return the view with validation errors
             return View(claims);
         }
+
+      
+
+
 
         // GET: Claims/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -237,10 +250,29 @@ namespace PROG_P1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        //GET: Approve or Reject a claim based on its ID & the provided status
+        public async Task<IActionResult> EditStatus(int id, string status)
+        {
+            var claim = _context.Claims.FirstOrDefault(c => c.ClaimsID == id);
+            if (claim == null)
+            {
+                return NotFound();
+            }
+
+            claim.Status = "Pending"; //Update the status of the claim (either approve / reject)
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
         public IActionResult Upload()
         {
             return View();
         }
+
+
 
 
         // POST: Upload Document

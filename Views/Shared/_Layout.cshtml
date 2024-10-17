@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PROG_P1.styles.css" asp-append-version="true" />
     <style>
+
+     
+
         .navbar {
             font-family: "Century Gothic", sans-serif;
             height: 90px;
@@ -47,7 +50,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm" style="background-color: #4D4DFF;">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-              <img src="~/ImageFolder/CMCSNAV.png" width="105" height="60">
+              <img src="~/ImageFolder/CMCSNAV.png" width="115" height="60">
             </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -75,9 +78,12 @@
                                  @if (User.IsInRole("Lecturer"))
                         {
                                 <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Create">Submit</a></li>
+                                <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="LecturerIndex">View</a></li>
                         }
-
+                                 @if (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager"))
+                                 {
                                 <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Index">Process</a></li>
+                                 }
                             </ul>
                         
                         </li>

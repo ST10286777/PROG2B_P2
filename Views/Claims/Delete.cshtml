@@ -47,18 +47,20 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TotalEarnings)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Document)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Document)
-        </dd>
-       
+
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ClaimsID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
+
+         @if (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager"))
+         {
         <a asp-action="Index">Back to List</a>
+         }
+           @if (User.IsInRole("Lecturer"))
+        {
+            <a asp-action="LecturerIndex">Back to List</a>
+        }
     </form>
 </div>

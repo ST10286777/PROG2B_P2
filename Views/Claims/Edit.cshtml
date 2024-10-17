@@ -10,40 +10,40 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+        <!-- Ensure method is POST and correct form action is called -->
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ClaimsID" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Module" class="control-label"></label>
-                <input asp-for="Module" class="form-control" />
-                <span asp-validation-for="Module" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HoursWorked" class="control-label"></label>
-                <input asp-for="HoursWorked" class="form-control" />
-                <span asp-validation-for="HoursWorked" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HourlyWage" class="control-label"></label>
-                <input asp-for="HourlyWage" class="form-control" />
-                <span asp-validation-for="HourlyWage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SupportingNote" class="control-label"></label>
-                <input asp-for="SupportingNote" class="form-control" />
-                <span asp-validation-for="SupportingNote" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Document" class="control-label">PDF File</label>
-                <input asp-for="Document" type="file" class="form-control" multiple="multiple" />
-                <span asp-validation-for="Document" class="text-danger"></span>
-            </div>
+            @* Fields for Lecturers to edit *@
+            @if (User.IsInRole("Lecturer"))
+            {
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module" class="control-label"></label>
+                    <input asp-for="Module" class="form-control" />
+                    <span asp-validation-for="Module" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoursWorked" class="control-label"></label>
+                    <input asp-for="HoursWorked" class="form-control" />
+                    <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HourlyWage" class="control-label"></label>
+                    <input asp-for="HourlyWage" class="form-control" />
+                    <span asp-validation-for="HourlyWage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SupportingNote" class="control-label"></label>
+                    <input asp-for="SupportingNote" class="form-control" />
+                    <span asp-validation-for="SupportingNote" class="text-danger"></span>
+                </div>
+            }
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -53,9 +53,12 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="LecturerIndex">Back to List</a>
 </div>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
