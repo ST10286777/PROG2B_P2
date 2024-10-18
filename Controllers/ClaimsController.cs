@@ -23,6 +23,8 @@ namespace PROG_P1.Controllers
         {
             _context = context;
             _userManager = userManager;
+
+            // Ensures that the upload directory exists within the wwwroot folder
             if (!Directory.Exists(_uploadFolder))
             {
                 Directory.CreateDirectory(_uploadFolder);
@@ -30,29 +32,49 @@ namespace PROG_P1.Controllers
         }
 
         // GET: Claims
+        //This action is used to retrieve all the claims with their documents
         public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User);
-            var claimsWithDocuments = await _context.Claims
-                .Include(c => c.Document) // This includes the related documents
-                .ToListAsync();
-
-            return View(claimsWithDocuments);
+            try
+            {
+                var userId = _userManager.GetUserId(User);
+                var claimsWithDocuments = await _context.Claims
+                    .Include(c => c.Document) // This includes the related documents
+                    .ToListAsync();
+                return View(claimsWithDocuments);
+            }
+            catch (Exception ex)
+            {
+               
+                return View("Error"); //return error if claims is not found
+            }
+            
         }
 
         // GET: Claims
+        //This  is used to retrieve all the claims of the logged in lecturer
         public async Task<IActionResult> LecturerIndex()
         {
-            var userId = _userManager.GetUserId(User);
-            var claims = await _context.Claims
-                .Include(c => c.Document)
-                .Where(c => c.UserID == userId) // Use Where instead of FirstOrDefault to return multiple claims
-                .ToListAsync(); // Get a list of claims
+            try
+            {
+                var userId = _userManager.GetUserId(User);
+                var claims = await _context.Claims
+                    .Include(c => c.Document)
+                    .Where(c => c.UserID == userId) // Use Where instead of FirstOrDefault to return multiple claims
+                    .ToListAsync(); // Get a list of claims
 
-            return View("LecturerIndex", claims); // Pass claims as the model
+                return View("LecturerIndex", claims); // Pass claims as the model
+            }
+            catch (Exception ex)
+            {
+                
+                return View("Error"); //return error 
+            }
+
         }
 
         // GET: Claims/Details/5
+        //This action retrieves a specific claim by using the ClaimID
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -71,6 +93,7 @@ namespace PROG_P1.Controllers
         }
 
         // GET: Claims/Create
+        //Action which displays the Create form
         public IActionResult Create()
         {
             return View();
@@ -113,8 +136,6 @@ namespace PROG_P1.Controllers
                     };
                     _context.Documents.Add(document);
                     await _context.SaveChangesAsync();
-
-                    ViewBag.Message = "File uploaded successfully!";
                 }
                 else
                 {
@@ -129,6 +150,7 @@ namespace PROG_P1.Controllers
 
 
         // GET: Claims/Edit/5
+        //Displays the Edit Form
         public async Task<IActionResult> Edit(int? id)
         {
 
@@ -146,6 +168,7 @@ namespace PROG_P1.Controllers
         }
 
         // POST: Claims/Edit/5
+        // Allows the Lecturer to edit previous claims they submitted
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClaimsID, Name, Module, HoursWorked, HourlyWage, SupportingNote, Status")] Claims claims)
@@ -189,6 +212,7 @@ namespace PROG_P1.Controllers
 
 
         // GET: Claims/Delete/5
+        //Displays the delete form of a specific claim
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -207,6 +231,7 @@ namespace PROG_P1.Controllers
         }
 
         // POST: Claims/Delete/5
+        //Allows user to delete a specific claim
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -281,6 +306,7 @@ namespace PROG_P1.Controllers
 
 
         // POST: Upload Document
+        // Handles file upload and linking the document to the claim
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file, int claimId)
         {
@@ -314,7 +340,7 @@ namespace PROG_P1.Controllers
             return RedirectToAction("Details", new { id = claimId });
         }
 
-        // Download Document
+        // Allows user to download a document related to a specific claim
         public IActionResult Download(string fileName)
         {
             var filePath = Path.Combine(_uploadFolder, fileName);
