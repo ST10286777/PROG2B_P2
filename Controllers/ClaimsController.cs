@@ -304,6 +304,10 @@ namespace PROG_P1.Controllers
 
 
 
+        // Code attribution: Upload files example was gained from Microsoft Learn.
+        // https://learn.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-8.0
+        // Authors: tdykstra, guardrex, tgondar, ryan-carbon, Rick-Anderson ect,
+
 
         // POST: Upload Document
         // Handles file upload and linking the document to the claim

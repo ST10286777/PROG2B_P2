@@ -150,6 +150,10 @@ namespace PROG_P1.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
+                        // Code attribution: Redirect Action example was gained from Stack Overflow.
+                        // https://stackoverflow.com/questions/2677072/asp-net-mvc-what-is-the-correct-way-to-redirect-to-pages-actions-in-mvc
+                        // Author: Jimmy : https://stackoverflow.com/users/166658/jimmy
+                        //Edited by: Luke Girvin https://stackoverflow.com/users/133/luke-girvin
                         return RedirectToAction("Index", "Claims");
                     }
                     else

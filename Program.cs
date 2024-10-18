@@ -17,6 +17,10 @@ namespace PROG_P1
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // Code attribution: User Role example was used to create roles from  youtube video: ASP.NET User Roles - Create and Assign Roles for AUTHORIZATION!
+            // https://www.youtube.com/watch?v=Y6DCP-yH-9Q
+            // Channel: tutorialsEU - C# https://www.youtube.com/@tutorialsEUC
+
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
