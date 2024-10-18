@@ -68,26 +68,30 @@
                                 <i class="fas fa-info-circle"></i>About
                             </a>
                         </li>
+
+                    @if (User.IsInRole("Lecturer") || (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager")))
+                    {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-claim"></i>Claims
                             </a>
-                      
+
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                                 @if (User.IsInRole("Lecturer"))
-                        {
-                                <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Create">Submit</a></li>
-                                <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="LecturerIndex">View</a></li>
-                        }
-                                 @if (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager"))
-                                 {
-                                <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Index">Process</a></li>
-                                 }
+                                @if (User.IsInRole("Lecturer"))
+                                {
+                                    <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Create">Submit</a></li>
+                                    <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="LecturerIndex">View</a></li>
+                                }
+                                @if (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager"))
+                                {
+                                    <li><a class="dropdown-item text-light" asp-area="" asp-controller="Claims" asp-action="Index">Process</a></li>
+                                }
                             </ul>
-                        
+
                         </li>
-                    </ul>
+                    }
+                </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>

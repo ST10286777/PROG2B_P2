@@ -80,7 +80,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label for="file">Lecturer Name</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -92,24 +92,24 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="HoursWorked" class="control-label"></label>
+                <label for="file">Hours Worked</label>
                 <input asp-for="HoursWorked" class="form-control" />
                 <span asp-validation-for="HoursWorked" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="HourlyWage" class="control-label"></label>
+                <label for="file">Hourly Wage</label>
                 <input asp-for="HourlyWage" class="form-control" />
                 <span asp-validation-for="HourlyWage" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="SupportingNote" class="control-label"></label>
+                <label for="file">Supporting Note</label>
                 <textarea asp-for="SupportingNote" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="SupportingNote" class="text-danger"></span>
             </div>
 
-            <!-- Document Upload Section -->
+           
             <div class="form-group">
                 <label for="file">Upload Supporting Documents</label>
                 <input type="file" name="file" class="form-control" multiple />

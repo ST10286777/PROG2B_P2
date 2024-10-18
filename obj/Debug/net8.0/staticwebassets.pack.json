@@ -13,8 +13,16 @@
       "PackagePath": "staticwebassets\\ImageFolder\\CMCSNAV.png"
     },
     {
-      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\ImageFolder\\Login.png",
-      "PackagePath": "staticwebassets\\ImageFolder\\Login.png"
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\ImageFolder\\LearnMore.png",
+      "PackagePath": "staticwebassets\\ImageFolder\\LearnMore.png"
+    },
+    {
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\ImageFolder\\LoginImage.png",
+      "PackagePath": "staticwebassets\\ImageFolder\\LoginImage.png"
+    },
+    {
+      "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\ImageFolder\\RegisterImage.png",
+      "PackagePath": "staticwebassets\\ImageFolder\\RegisterImage.png"
     },
     {
       "Id": "C:\\Users\\keira\\source\\repos\\PROG_P1\\PROG_P1\\wwwroot\\css\\site.css",

@@ -1,60 +1,120 @@
 ﻿@model PROG_P1.Models.Claims
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Claim Details";
 }
 
-<h1>Details</h1>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
 
-<div>
-    <h4>Claims</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Module)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Module)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoursWorked)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoursWorked)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HourlyWage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HourlyWage)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SupportingNote)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SupportingNote)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalEarnings)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalEarnings)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ClaimsID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    h1 {
+        text-align: center;
+        color: #4D4DFF;
+        margin-bottom: 30px;
+    }
+
+    .main {
+        background-color: #fff;
+        color: #333;
+        margin: 20px auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 700px;
+        max-width: 90%;
+        box-sizing: border-box;
+    }
+
+    .product-info h4 {
+        font-size: 24px;
+        color: #4D4DFF;
+        margin-bottom: 10px;
+    }
+
+    .product-info p {
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    .product-info strong {
+        color: #555;
+    }
+
+    .buttons {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .button {
+        border: none;
+        color: white;
+        background-color: #4D4DFF;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+
+        .button:hover {
+            background-color: #3333FF;
+        }
+
+    .back-button {
+        background-color: #FF4D4D;
+    }
+
+        .back-button:hover {
+            background-color: #FF3333;
+        }
+</style>
+
+<h1>Claim Details</h1>
+
+<div class="main">
+    <div class="product-info">
+        <h4>@Model.Name's Claim</h4>
+        <hr />
+        <p>
+            <strong>Module:</strong> @Model.Module <br />
+            <strong>Hours Worked:</strong> @Model.HoursWorked <br />
+            <strong>Hourly Wage:</strong> R @Model.HourlyWage.ToString("N2") <br />
+            <strong>Supporting Note:</strong> @Model.SupportingNote <br />
+            <strong>Documents:</strong>
+            @if (Model.Document != null && Model.Document.Any())
+            {
+                foreach (var doc in Model.Document)
+                {
+                    <a asp-action="Download" asp-route-fileName="@doc.FileName" class="button">Download @doc.FileName</a>
+                }
+            }
+            else
+            {
+                <span>No documents available</span>
+            }
+            <br />
+        </p>
+    </div>
+
+    <div class="buttons">
+        @if (User.IsInRole("Lecturer"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.ClaimsID" class="button">Edit</a>
+            <a asp-action="LecturerIndex" class="button back-button">Back to Claims</a>
+        }
+
+        @if (User.IsInRole("Programme Coordinator") || User.IsInRole("Academic Manager"))
+        {
+            <a asp-action="Index" class="button back-button">Back to Claims</a>
+        }
+    </div>
 </div>

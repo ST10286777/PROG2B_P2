@@ -60,7 +60,7 @@ namespace PROG_P1.Controllers
                 return NotFound();
             }
 
-            var claims = await _context.Claims
+            var claims = await _context.Claims.Include(c => c.Document)
                 .FirstOrDefaultAsync(m => m.ClaimsID == id);
             if (claims == null)
             {
@@ -131,6 +131,7 @@ namespace PROG_P1.Controllers
         // GET: Claims/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -149,6 +150,7 @@ namespace PROG_P1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClaimsID, Name, Module, HoursWorked, HourlyWage, SupportingNote, Status")] Claims claims)
         {
+           
             if (id != claims.ClaimsID)
             {
                 return NotFound();
@@ -158,9 +160,12 @@ namespace PROG_P1.Controllers
             {
                 try
                 {
+                    var userId = _userManager.GetUserId(User);
+                    claims.UserID = userId;
+                    claims.Status = "Pending";
                     _context.Update(claims);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index)); // Ensure this redirect happens on success
+                    return RedirectToAction(nameof(LecturerIndex)); // Ensure this redirect happens on success
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -191,7 +196,7 @@ namespace PROG_P1.Controllers
                 return NotFound();
             }
 
-            var claims = await _context.Claims
+            var claims = await _context.Claims.Include(c => c.Document)
                 .FirstOrDefaultAsync(m => m.ClaimsID == id);
             if (claims == null)
             {

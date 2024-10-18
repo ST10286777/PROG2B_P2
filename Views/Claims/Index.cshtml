@@ -1,90 +1,242 @@
 ﻿@model IEnumerable<PROG_P1.Models.Claims>
-@* @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
- *@
 
 @{
     ViewData["Title"] = "Review Claims";
+
+    // Separate claims by status
+    var pendingClaims = Model.Where(c => c.Status == "Pending");
+    var approvedClaims = Model.Where(c => c.Status == "Approved");
+    var rejectedClaims = Model.Where(c => c.Status == "Rejected");
 }
+
 <style>
     .button {
         color: white;
-        background-color: #4D4DFF;
         padding: 8px 8px;
         text-align: center;
         text-decoration: none;
-        display: inline-block;
+        display: inline-block; 
         font-size: 12px;
-        margin: 4px 2px;
+        margin: 4px 2px; 
         cursor: pointer;
         border-radius: 5px;
         width: auto;
         padding: 10px 20px;
     }
+
+    table thead {
+        background-color: #4D4DFF;
+        color: white;
+        border: none;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        table th
+        {
+            border: none;
+        }
+
+        h1
+        {
+        text-align: center;
+        }
+      
+
 </style>
 
-<h1 class="text-center">Review Claims</h1>
+<h1>Review Claims</h1>
 
 <div class="container">
-    <table class="table table-bordered table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>Lecturer name</th>
-                <th>@Html.DisplayNameFor(model => model.Module)</th>
-                <th>Hours Worked</th>
-                <th>Hourly wage</th>
-                <th>Total earnings</th>
-                <th>Supporting Note</th>
-                <th>Status</th>
-                <th>Download supporting documents</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <!-- Pending Claims Table -->
+    @if (pendingClaims.Any())
+    {
+        <h2>Pending Claims</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Module)</td>
-                    <td>@Html.DisplayFor(modelItem => item.HoursWorked)</td>
-                    <td>R @item.HourlyWage.ToString("N2")</td>
-                    <td>R @item.TotalEarnings.ToString("N2")</td>
-                    <td>@Html.DisplayFor(modelItem => item.SupportingNote)</td>
-                    <td style="color: @(item.Status == "Approved" ? "green" : (item.Status == "Rejected" ? "red" : "black"));">
-                        <b>  @Html.DisplayFor(modelItem => item.Status) </b>
-                    </td>
-                    <td>
-                        @if (item.Document != null && item.Document.Any())
-                        {
-                            foreach (var doc in item.Document)
-                            {
-                                <a asp-action="Download" asp-route-fileName="@doc.FileName" class="button">Download @doc.FileName </a>
-                            }
-                        }
-                        else
-                        {
-                            <span>No documents</span>
-                        }
-                    </td>
-                    <td>
-                        <div class="d-flex justify-content-around">
-                            <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Details</a>
-                                <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Delete</a>
-                            @if (item.Status != "Pending" )
-                            {
-                                <a asp-action="EditStatus" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm">Edit Status</a>
-                            }
-                            @if (item.Status == "Pending")
-                            {
-                                <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success">Approve</a>
-                                <a asp-action="Reject" asp-route-id="@item.ClaimsID" class="btn btn-danger">Reject</a>
-                            }
-                        </div>
-                    </td>
+                    <th>Lecturer Name</th>
+                    <th>Module</th>
+                    <th>Hours Worked</th>
+                    <th>Hourly Wage</th>
+                    <th>Total Earnings</th>
+                    <th>Supporting Note</th>
+                    <th>Status</th>
+                    <th>Download Documents</th>
+                    <th>Status Actions</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in pendingClaims)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Module)</td>
+                        <td>@Html.DisplayFor(modelItem => item.HoursWorked)</td>
+                        <td>R @item.HourlyWage.ToString("N2")</td>
+                        <td>R @item.TotalEarnings.ToString("N2")</td>
+                        <td>@Html.DisplayFor(modelItem => item.SupportingNote)</td>
+                        <td style="color:black;"><b>@Html.DisplayFor(modelItem => item.Status)</b></td>
+                        <td>
+                            @if (item.Document != null && item.Document.Any())
+                            {
+                                foreach (var doc in item.Document)
+                                {
+                                    <a asp-action="Download" asp-route-fileName="@doc.FileName" class="button" style="background-color: #4D4DFF;">Download @doc.FileName</a>
+                                }
+                            }
+                            else
+                            {
+                                <span>No documents</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Approve" asp-route-id="@item.ClaimsID" class="btn btn-success button">Approve</a>
+                            <a asp-action="Reject" asp-route-id="@item.ClaimsID" class="btn btn-danger button">Reject</a>
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Delete</a>
+                            <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <!-- Approved Claims Table -->
+    @if (approvedClaims.Any())
+    {
+        <h2>Approved Claims</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Lecturer Name</th>
+                    <th>Module</th>
+                    <th>Hours Worked</th>
+                    <th>Hourly Wage</th>
+                    <th>Total Earnings</th>
+                    <th>Supporting Note</th>
+                    <th>Status</th>
+                    <th>Download Documents</th>
+                    <th>Status Actions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in approvedClaims)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Module)</td>
+                        <td>@Html.DisplayFor(modelItem => item.HoursWorked)</td>
+                        <td>R @item.HourlyWage.ToString("N2")</td>
+                        <td>R @item.TotalEarnings.ToString("N2")</td>
+                        <td>@Html.DisplayFor(modelItem => item.SupportingNote)</td>
+                        <td style="color:green;"><b>@Html.DisplayFor(modelItem => item.Status)</b></td>
+                        <td>
+                            @if (item.Document != null && item.Document.Any())
+                            {
+                                foreach (var doc in item.Document)
+                                {
+                                    <a asp-action="Download" asp-route-fileName="@doc.FileName" class="button" style="background-color: #4D4DFF;">Download @doc.FileName</a>
+                                }
+                            }
+                            else
+                            {
+                                <span>No documents</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditStatus" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Edit Status</a>
+                        </td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Delete</a>
+                            <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+    @if (rejectedClaims.Any())
+    {
+        <h2>Rejected Claims</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Lecturer Name</th>
+                    <th>Module</th>
+                    <th>Hours Worked</th>
+                    <th>Hourly Wage</th>
+                    <th>Total Earnings</th>
+                    <th>Supporting Note</th>
+                    <th>Status</th>
+                    <th>Download Documents</th>
+                    <th>Status Actions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in rejectedClaims)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Module)</td>
+                        <td>@Html.DisplayFor(modelItem => item.HoursWorked)</td>
+                        <td>R @item.HourlyWage.ToString("N2")</td>
+                        <td>R @item.TotalEarnings.ToString("N2")</td>
+                        <td>@Html.DisplayFor(modelItem => item.SupportingNote)</td>
+                        <td style="color:red;"><b>@Html.DisplayFor(modelItem => item.Status)</b></td>
+                        <td>
+                            @if (item.Document != null && item.Document.Any())
+                            {
+                                foreach (var doc in item.Document)
+                                {
+                                    <a asp-action="Download" asp-route-fileName="@doc.FileName" class="button" style="background-color: #4D4DFF;}">Download @doc.FileName</a>
+                                }
+                            }
+                            else
+                            {
+                                <span>No documents</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="EditStatus" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Edit Status</a>
+                        </td>
+
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Delete</a>
+                            <a asp-action="Details" asp-route-id="@item.ClaimsID" class="btn btn-info btn-sm button">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
-
-
